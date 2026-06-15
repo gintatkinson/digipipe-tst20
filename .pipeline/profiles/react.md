@@ -41,11 +41,11 @@ last_updated: "2026-06-15"
 All database, networking, and authentication logic must be defined as abstract interfaces ("Ports") implemented by environment-specific modules ("Adapters").
 
 ```
-[React Canvas] ──> [Custom Hook / Port Interface] ──> [Firestore SDK Adapter / Local Cache Adapter]
+[React Canvas] ──> [Custom Hook / Port Interface] ──> [Firestore Adapter / Protobuf API Adapter]
 ```
 
 - **Ports**: Reside under `src/services/interfaces/` (e.g., `IDatabaseService.ts`).
-- **Adapters**: Reside under `src/services/firestore/` or `src/services/mock/`.
+- **Adapters**: Reside under `src/services/firestore/`, `src/services/protobuf/` (for Protobuf-backed APIs), or `src/services/mock/`.
 
 ### 2.2 Firestore Model Typing
 All documents read from or written to Firestore must be mapped using standard TypeScript type guards and validators conforming to `firestore.rules`.

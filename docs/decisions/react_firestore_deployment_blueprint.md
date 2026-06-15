@@ -1,36 +1,36 @@
 # React Firestore Hybrid Deployment Architecture Blueprint
 
-This blueprint outlines the simplified architecture for the 3D topology visualization module. It completely eliminates Tauri/wrapper complexity in favor of a unified **Hybrid Flutter Shell + Embedded React** model for web and native desktop (macOS & Windows) deployments, backed by Google Firestore.
+This blueprint outlines the simplified architecture for the 3D topology visualization module. It supports a unified **Hybrid Flutter Shell + Embedded React** model for web and native desktop (macOS & Windows) deployments.
 
 ---
 
 ## 1. Architectural Strategy
 
-Instead of wrapping a full React application in Tauri (which requires a complex Rust compilation toolchain), the core application shell (auth, navigation, CRUD forms) is implemented in **Flutter** (for both web and native desktop). The specialized React 3D view is embedded as a decoupled micro-frontend running in a native Webview inside the Flutter shell.
+To support both **Firestore SDK** and a future **Protobuf-backed API** (e.g., gRPC-web or REST with Protobuf serialization over WebSockets), the application utilizes a strict **Hexagonal Architecture (Ports and Adapters)**. The React 3D view is completely decoupled from the data binding layer.
 
 ```mermaid
 graph TD
-    subgraph Host ["Flutter Application Shell (Web/Desktop)"]
-        FlutterUI[Flutter UI Widgets] --> FlutterState[Riverpod/StateNotifier]
-        FlutterState --> FlutterSDK[cloud_firestore SDK]
+    subgraph UI ["User Interface Layer"]
+        ReactUI[React 3D Canvas] --> Ports[Service Ports / Interfaces]
     end
 
-    subgraph Embedded ["Embedded Webview Container"]
-        ReactUI[React 3D Canvas] --> ReactSDK[firebase Firestore JS SDK]
+    subgraph Adapters ["Adapters Layer (Swappable Bindings)"]
+        Ports --> FirestoreAdapter[Firestore Web SDK Adapter]
+        Ports --> ProtoAdapter[Protobuf gRPC-web Adapter]
     end
 
-    subgraph Data ["Database & Synchronization Layer"]
-        FlutterSDK --> SQLiteCache[(Local SQLite Cache)]
-        ReactSDK --> IndexedDBCache[(Local IndexedDB Cache)]
-        
-        SQLiteCache <==> CloudFirestore{{Google Cloud Firestore}}
-        IndexedDBCache <==> CloudFirestore
+    subgraph Data ["Data & Server Layer"]
+        FirestoreAdapter --> CloudFirestore{{Google Cloud Firestore}}
+        ProtoAdapter --> ProtoBackend{{Rust Backend / Protobuf API}}
     end
     
-    style Host fill:#2A2D34,stroke:#4C566A,stroke-width:2px,color:#ECEFF4
-    style Embedded fill:#3B4252,stroke:#4C566A,stroke-width:2px,color:#ECEFF4
+    style UI fill:#2A2D34,stroke:#4C566A,stroke-width:2px,color:#ECEFF4
+    style Adapters fill:#3B4252,stroke:#4C566A,stroke-width:2px,color:#ECEFF4
     style Data fill:#4C566A,stroke:#4C566A,stroke-width:2px,color:#ECEFF4
 ```
+
+- **Loose Coupling**: React rendering layers bind exclusively to Ports (abstract TypeScript interfaces like `IDatabaseService`).
+- **Swappable Bindings**: Swapping the database from Firestore to a Protobuf API involves only replacing the adapter binding (e.g., injecting `gRPCWebTopologyAdapter` instead of `FirestoreTopologyAdapter`), leaving all UI rendering code entirely unchanged.
 
 ---
 
