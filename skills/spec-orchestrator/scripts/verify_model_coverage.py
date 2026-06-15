@@ -673,20 +673,20 @@ def parse_yang_file(filepath):
     # Patterns to match definitions
     # Covers all primary YANG statement types that define named schema nodes
     patterns = [
-        r'\btypedef\s+([a-zA-Z0-9_\-]+)',
-        r'\bleaf\s+([a-zA-Z0-9_\-]+)',
-        r'\bleaf-list\s+([a-zA-Z0-9_\-]+)',
-        r'\bcontainer\s+([a-zA-Z0-9_\-]+)',
-        r'\blist\s+([a-zA-Z0-9_\-]+)',
-        r'\bgrouping\s+([a-zA-Z0-9_\-]+)',
-        r'\bchoice\s+([a-zA-Z0-9_\-]+)',
-        r'\bcase\s+([a-zA-Z0-9_\-]+)',
-        r'\bidentity\s+([a-zA-Z0-9_\-]+)',
-        r'\banydata\s+([a-zA-Z0-9_\-]+)',
-        r'\banyxml\s+([a-zA-Z0-9_\-]+)',
-        r'\brpc\s+([a-zA-Z0-9_\-]+)',
-        r'\bnotification\s+([a-zA-Z0-9_\-]+)',
-        r'\baction\s+([a-zA-Z0-9_\-]+)'
+        r'\btypedef\s+([a-zA-Z0-9_\-.]+)',
+        r'\bleaf\s+([a-zA-Z0-9_\-.]+)',
+        r'\bleaf-list\s+([a-zA-Z0-9_\-.]+)',
+        r'\bcontainer\s+([a-zA-Z0-9_\-.]+)',
+        r'\blist\s+([a-zA-Z0-9_\-.]+)',
+        r'\bgrouping\s+([a-zA-Z0-9_\-.]+)',
+        r'\bchoice\s+([a-zA-Z0-9_\-.]+)',
+        r'\bcase\s+([a-zA-Z0-9_\-.]+)',
+        r'\bidentity\s+([a-zA-Z0-9_\-.]+)',
+        r'\banydata\s+([a-zA-Z0-9_\-.]+)',
+        r'\banyxml\s+([a-zA-Z0-9_\-.]+)',
+        r'\brpc\s+([a-zA-Z0-9_\-.]+)',
+        r'\bnotification\s+([a-zA-Z0-9_\-.]+)',
+        r'\baction\s+([a-zA-Z0-9_\-.]+)'
     ]
 
     definitions = set()
