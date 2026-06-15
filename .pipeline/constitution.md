@@ -198,6 +198,7 @@ To prevent semantic divergence between structural design and dynamic behavior:
 - Do NOT create Features larger than 10 acceptance criteria without splitting.
 - Do NOT hardcode GitHub issue numbers in cross-references -- always query live state via `gh` CLI.
 - Do NOT silently drop schema nodes that are difficult to categorize -- flag them and escalate.
+- Do NOT edit or patch pipeline tooling scripts (such as linter, reconciler, or verify scripts) inside downstream target repositories. Any tooling bugs or feature requests must be escalated and fixed upstream in the pipeline repository.
 
 ---
 
